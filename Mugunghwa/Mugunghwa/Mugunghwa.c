@@ -247,7 +247,7 @@ void main() {
 	system("mode con: cols=120 lines=30"); 
 	system("title 무궁화꽃이 피었습니다");
 	title();
-
+	printf("hi");
 	while (1) {
 		switch (menu()) {
 		case 0: game(); break; //게임시작
