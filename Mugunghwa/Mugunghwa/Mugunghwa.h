@@ -4,6 +4,9 @@
 #include<Windows.h>
 #include<conio.h>
 #include <time.h>
+#pragma comment (lib, "winmm.lib")
+#include <mmsystem.h>;
+
 
 enum Color
 {

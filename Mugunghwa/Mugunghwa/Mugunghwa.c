@@ -46,24 +46,44 @@ int keyControl() {
 
 //제목
 void title() {
-	int x = 1;
-	int y = 1;
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
-	gotoxy(x, y++);  printf(" _______ ______   _______ _______ __    _   ___     ___ _______ __   __ _______ ");
-	gotoxy(x, y++);  printf("|       |    _ | |       |       |  |  | | |   |   |   |       |  | |  |       |");
-	gotoxy(x, y++);  printf("|    ___|   | || |    ___|    ___|   |_| | |   |   |   |    ___|  |_|  |_     _|");
-	gotoxy(x, y++);  printf("|   | __|   |_||_|   |___|   |___|       | |   |   |   |   | __|       | |   | ");
-	gotoxy(x, y++);  printf("|   ||  |    __  |    ___|    ___|  _    | |   |___|   |   ||  |       | |   | ");
-	gotoxy(x, y++);  printf("|   |_| |   |  | |   |___|   |___| | |   | |       |   |   |_| |   _   | |   | ");
-	gotoxy(x, y++);  printf("|_______|___|__|_|_______|_______|_|__|__|_|_______|___|_______|__| |__| |___|");
 
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
-	gotoxy(x, y++);  printf("|    _ | |       |      |  |   |   |   |       |  | |  |       |   ");
-	gotoxy(x, y++);  printf("|   | || |    ___|  _    | |   |   |   |    ___|  |_|  |_     _|   ");
-	gotoxy(x, y++);  printf("|   |_||_|   |___| | |   | |   |   |   |   | __|       | |   |   ");
-	gotoxy(x, y++);  printf("|    __  |    ___| |_|   | |   |___|   |   ||  |       | |   |   ");
-	gotoxy(x, y++);  printf("|   |  | |   |___|       | |       |   |   |_| |   _   | |   |     ");
-	gotoxy(x, y++);  printf("|___|  |_|_______|______|  |_______|___|_______|__| |__| |___| ");
+	int x = 1;
+	int y = 6;
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+	gotoxy(x, y++);  printf(" __   __ __   __ _______ __   __ __    _ _______ __   __ _     _ _______ ");
+	gotoxy(x, y++);  printf("|  |_|  |  | |  |       |  | |  |  |  | |       |  | |  | | _ | |   _   |");
+	gotoxy(x, y++);  printf("|       |  | |  |    ___|  | |  |   |_| |    ___|  |_|  | || || |  |_|  |");
+	gotoxy(x, y++);  printf("|       |  |_|  |   | __|  |_|  |       |   | __|       |       |       |");
+	gotoxy(x, y++);  printf("|       |       |   ||  |       |  _    |   ||  |       |       |       |");
+	gotoxy(x, y++);  printf("| ||_|| |       |   |_| |       | | |   |   |_| |   _   |   _   |   _   |");
+	gotoxy(x, y++);  printf("|_|   |_|_______|_______|_______|_|  |__|_______|__| |__|__| |__|__| |__|");
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTBLUE);
+	gotoxy(x, y++);  printf("|  | |  |   _   |       |     ");
+	gotoxy(x, y++);  printf("|  |_|  |  |_|  |  _____|   ");
+	gotoxy(x, y++);  printf("|       |       | |_____  ");
+	gotoxy(x, y++);  printf("|       |       |_____  |    ");
+	gotoxy(x, y++);  printf("|   _   |   _   |_____| |   ");
+	gotoxy(x, y++);  printf("|__|_|__|__| |__|_______|");
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTGREEN);
+	printf("_______ __   __ _______ ______          ");
+	gotoxy(x, y++);  printf("|  _    |   |   |       |       |  |_|  |       |      |         ");
+	gotoxy(x, y++);  printf("| |_|   |   |   |   _   |   _   |       |    ___|  _    |   ");
+	gotoxy(x, y++);  printf("|       |   |   |  | |  |  | |  |       |   |___| | |   |   ");
+	gotoxy(x, y++);  printf("|  _   ||   |___|  |_|  |  |_|  |       |    ___| |_|   |    ");
+	gotoxy(x, y++);  printf("| |_|   |       |       |       | ||_|| |   |___|       |     ");
+	gotoxy(x, y++);  printf("|_______|_______|_______|_______|_|   |_|_______|______|    ");
+
+
+}
+
+
+
+//설명
+void manual() {
+
+
 
 
 }
@@ -71,11 +91,11 @@ void title() {
 //메뉴선택
 int  menu() {
 
-	int x = 35;
-	int y = 10;
+	int x = 45;
+	int y = 22;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(34, y);  printf("▶ 게 임 시 작");
+	gotoxy(x-1, y);  printf("▶ 게 임 시 작");
 	gotoxy(x, y += 2);  printf(" 게 임 종 료");
 	gotoxy(30, y -= 2);
 	while (1) {
@@ -83,14 +103,14 @@ int  menu() {
 		switch (n)
 		{
 		case UP: {
-			if (y > 10) {
+			if (y > 22) {
 				gotoxy(x - 1, y); printf("  ");
 				gotoxy(x - 1, y -= 2); printf("▶");
 			}
 			break;
 		}
 		case DOWN: {
-			if (y < 12) {
+			if (y < 24) {
 				gotoxy(x - 1, y); printf("  ");
 				gotoxy(x - 1, y += 2); printf("▶");
 			}
@@ -98,7 +118,7 @@ int  menu() {
 			break;
 		}
 		case SPACE: {
-			return y - 10;
+			return y - 22;
 		}	break;
 		}
 	}
@@ -139,7 +159,7 @@ int character_control(int x, int y) {
 		}
 
 		case DOWN: {
-			if (y < 24) {
+			if (y < 23) {
 				gotoxy(x, y); printf("    ");
 				y++;
 			}
@@ -163,14 +183,41 @@ int character_control(int x, int y) {
 
 
 
+//영희 뒤돌아보기전
+void tagger() {
+
+	PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원테스트
+	int x = 52;
+	int y = 7;
+
+	//영희
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	gotoxy(x, y++);  printf("／￣￣￣￣＼");
+	gotoxy(x, y++);  printf("/　 ㅡ　 ㅡ＼ ");
+	gotoxy(x, y++);  printf("/ (●) 　(●) ");
+	gotoxy(x, y++);  printf("｜ ⌒  人⌒ | ");
+	gotoxy(x, y++);  printf("＼　　     ノ ");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+	gotoxy(x, y++);  printf("  /⌒＼-イ ");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+	gotoxy(x, y++);  printf(" (　r 　 ｜ ");
+	gotoxy(x, y++);  printf(" ＼ノノ--｜ ");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	gotoxy(x, y++);  printf("  |＿_/_/ ");
+	gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
+
+
+}
+
+
 //맵
 void map() {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 60; i++) {
 		gotoxy(i, 0); printf("■");
 	}
 
-	for (int i = 0; i < 50; i++) {
+	for (int i = 0; i < 60; i++) {
 		gotoxy(i, 24); printf("■");
 	}
 	//start 라인
@@ -181,9 +228,9 @@ void map() {
 	//finish 라인
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
 	for (int i = 1; i < 24; i++) {
-		gotoxy(45, i); printf("|");
+		gotoxy(50, i); printf("|");
 	}
-
+	tagger();
 
 }
 
@@ -197,8 +244,8 @@ void game() {
 }
 void main() {
 	CursorView();
+	system("mode con: cols=120 lines=30"); 
 	system("title 무궁화꽃이 피었습니다");
-	system("mode con: cols=100 lines=25");
 	title();
 
 	while (1) {
