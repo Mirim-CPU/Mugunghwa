@@ -29,9 +29,22 @@ enum Color
 };
 
 //키보드 정의
-#define UP  0
-#define DOWN  1
-#define RIGHT  3
-#define LEFT  4
-#define SPACE 5
-#define ESC 6
+#define UP  10
+#define DOWN  11
+#define RIGHT  13
+#define LEFT  14
+#define SPACE 15
+#define ESC 16
+
+
+#define WIDTH 100
+#define HEIGHT 28
+#define BNum 5
+
+typedef struct
+{
+    int x;
+    int y;
+
+    int con;
+}Hurdle;

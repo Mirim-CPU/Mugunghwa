@@ -1,5 +1,8 @@
 #include "Mugunghwa.h"
 
+Hurdle hurdle[BNum];
+
+
 //좌표
 void gotoxy(int x, int y)
 {
@@ -125,7 +128,7 @@ int  menu() {
 
 }
 
-
+int i;
 //캐릭터 움직이기
 int character_control(int x, int y) {
 
@@ -165,6 +168,7 @@ int character_control(int x, int y) {
 			}
 			break;
 		}
+		
 		}
 
 		gotoxy(x, y); printf("  ■  ");
@@ -209,6 +213,14 @@ void tagger() {
 
 }
 
+//장해물 생성
+void CreateHurdle() {
+	
+	for (int i = 0; i < BNum; i++) {
+			hurdle[i].x = rand() % 42 + 4;
+			hurdle[i].y = rand() % 22+1;
+	}
+}
 
 //맵
 void map() {
@@ -232,8 +244,20 @@ void map() {
 	}
 	tagger();
 
+	CreateHurdle();
+	for (int i = 0; i < BNum; i++) {
+			gotoxy(hurdle[i].x, hurdle[i].y);
+			printf("△");
+		
+	}
+
 }
 
+
+//장해물 닿음
+int TouchHurdle() {
+}
+//게임 시작
 void game() {
 	system("cls");
 
@@ -243,11 +267,13 @@ void game() {
 	system("pause>null\n");
 }
 void main() {
+	srand(time(NULL));
+
 	CursorView();
 	system("mode con: cols=120 lines=30"); 
 	system("title 무궁화꽃이 피었습니다");
 	title();
-	printf("hi");
+	
 	while (1) {
 		switch (menu()) {
 		case 0: game(); break; //게임시작
