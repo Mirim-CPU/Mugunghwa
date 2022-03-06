@@ -3,6 +3,9 @@
 Hurdle hurdle[BNum];
 
 
+
+int score = 0; //점수
+int answer[45]; //문제 저장
 //좌표
 void gotoxy(int x, int y)
 {
@@ -107,6 +110,7 @@ int  menu() {
 		{
 		case UP: {
 			if (y > 22) {
+			
 				gotoxy(x - 1, y); printf("  ");
 				gotoxy(x - 1, y -= 2); printf("▶");
 			}
@@ -128,26 +132,29 @@ int  menu() {
 
 }
 
-int i;
+
+int m_x = 3; //화살표 처음 위치
 //캐릭터 움직이기
 int character_control(int x, int y) {
-
+	int i = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 	gotoxy(x, y); printf("  ■  ");
-	while (1) {
+	while (i<45) {
 		int n = keyControl();
 		Sleep(300);
 		switch (n)
 		{
+
 		case RIGHT: {
 			if (x < 50) {
+				if (answer[i] == 0 || answer[i] == 1 || answer[i] == 2 || answer[i] == 3) { score += 10; }
 				x++;
 				break;
 			}
 
 		}
 		case LEFT: {
-			if (x > 2) {
+			if (x > 2) {	
 				x--;
 				break;
 			}
@@ -155,6 +162,7 @@ int character_control(int x, int y) {
 		}
 		case UP: {
 			if (y > 1) {
+				if (answer[i] == 5) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y--;
 			}
@@ -163,6 +171,7 @@ int character_control(int x, int y) {
 
 		case DOWN: {
 			if (y < 23) {
+				if (answer[i] == 4) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y++;
 			}
@@ -170,9 +179,12 @@ int character_control(int x, int y) {
 		}
 		
 		}
-
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 		gotoxy(x, y); printf("  ■  ");
-
+		gotoxy(m_x++,27); printf("  ");
+		i++;
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+		gotoxy(52, 27); printf("점수 :  %d", score);
 		//Start 라인 지우기
 		if (x > 0) {
 			for (int i = 0; i < 25; i++) {
@@ -187,28 +199,49 @@ int character_control(int x, int y) {
 
 
 
-//영희 뒤돌아보기전
+//영희술래~
 void tagger() {
-
+	int z = 0; //아무생각 없이 선언한 변수.. 음원 끝나면 뒤돌게
 	PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원테스트
 	int x = 52;
 	int y = 7;
 
-	//영희
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(x, y++);  printf("／￣￣￣￣＼");
-	gotoxy(x, y++);  printf("/　 ㅡ　 ㅡ＼ ");
-	gotoxy(x, y++);  printf("/ (●) 　(●) ");
-	gotoxy(x, y++);  printf("｜ ⌒  人⌒ | ");
-	gotoxy(x, y++);  printf("＼　　     ノ ");
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-	gotoxy(x, y++);  printf("  /⌒＼-イ ");
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-	gotoxy(x, y++);  printf(" (　r 　 ｜ ");
-	gotoxy(x, y++);  printf(" ＼ノノ--｜ ");
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(x, y++);  printf("  |＿_/_/ ");
-	gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
+	//영희 뒤돌기
+	if (z == 1) {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+		gotoxy(x, y++);  printf("／￣￣￣￣＼");
+		gotoxy(x, y++);  printf("/ㅡ　 　ㅡ ＼ ");
+		gotoxy(x, y++);  printf("/(★) (★) ");
+		gotoxy(x, y++);  printf("｜⌒ 人⌒   | ");
+		gotoxy(x, y++);  printf("＼　　     ノ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+		gotoxy(x, y++);  printf("  /⌒＼-イ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+		gotoxy(x, y++);  printf(" (　r 　 ｜ ");
+		gotoxy(x, y++);  printf(" ＼ノノ--｜ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+		gotoxy(x, y++);  printf("  |＿_/_/ ");
+		gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
+	}
+	//영희 뒤돌기전
+	else {
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+		gotoxy(x, y++);  printf("／￣￣￣￣＼");
+		gotoxy(x, y++);  printf("/　 ㅡ　 ㅡ＼ ");
+		gotoxy(x, y++);  printf("/ (●) 　(●) ");
+		gotoxy(x, y++);  printf("｜ ⌒  人⌒ | ");
+		gotoxy(x, y++);  printf("＼　　     ノ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
+		gotoxy(x, y++);  printf("  /⌒＼-イ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+		gotoxy(x, y++);  printf(" (　r 　 ｜ ");
+		gotoxy(x, y++);  printf(" ＼ノノ--｜ ");
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+		gotoxy(x, y++);  printf("  |＿_/_/ ");
+		gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
+	}
+
+	
 
 
 }
@@ -250,24 +283,46 @@ void map() {
 			printf("△");
 		
 	}
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	gotoxy(52, 27); printf("점수 :  %d", score);
+}
 
+
+
+//미션출력
+void mission() {
+	srand(time(NULL)); 
+	char m[6][10]= {"→",  "→",  "→","→","↑","↓",};
+	int color[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
+	
+	gotoxy(3, 27);
+	for (int i = 0; i < 45; i++) {
+		int rn = (rand() % 6);
+		answer[i] = rn;
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[rn]);
+		printf("%s",m[rn]); //화살표 출력
+	}
 }
 
 
 //장해물 닿음
 int TouchHurdle() {
 }
+
+
 //게임 시작
 void game() {
 	system("cls");
+	CursorView(); //커서 숨기기
 
-	map();
-	character_control(0, 3); //유저시작 위치
+	mission(); //미션
+	map(); //맵 그리기
+	character_control(0, 11); //캐릭터그리기 유저시작 위치
 
 	system("pause>null\n");
 }
 void main() {
-	srand(time(NULL));
+
 
 	CursorView();
 	system("mode con: cols=120 lines=30"); 
