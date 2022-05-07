@@ -4,6 +4,8 @@
 #include<Windows.h>
 #include<conio.h>
 #include <time.h>
+#include<math.h>
+#include <process.h>
 #pragma comment (lib, "winmm.lib")
 #include <mmsystem.h>;
 

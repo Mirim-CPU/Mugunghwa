@@ -5,6 +5,10 @@ Hurdle hurdle[BNum];
 
 
 int score = 0; //점수
+double beginTime;
+double endTime;
+double thisTime; //begin-end;
+
 int answer[45]; //문제 저장
 //좌표
 void gotoxy(int x, int y)
@@ -199,15 +203,30 @@ int character_control(int x, int y) {
 
 
 
-//영희술래~
-void tagger() {
-	int z = 0; //아무생각 없이 선언한 변수.. 음원 끝나면 뒤돌게
-	PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원테스트
+unsigned _stdcall MusicTimer() {
+	timeBeginPeriod(1);
+
+	beginTime = timeGetTime();
+	PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원
+	while (1)
+	{
+		endTime = timeGetTime();
+
+		thisTime = (endTime - beginTime) / 1000;
+		if (thisTime == (double)6) {
+			return 1;
+		}
+	}
+
+	return ;
+}
+
+//영희 보여주기
+void showYoungHee(int show) {
 	int x = 52;
 	int y = 7;
 
-	//영희 뒤돌기
-	if (z == 1) {
+	if (show == 1) {
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 		gotoxy(x, y++);  printf("／￣￣￣￣＼");
 		gotoxy(x, y++);  printf("/ㅡ　 　ㅡ ＼ ");
@@ -240,6 +259,19 @@ void tagger() {
 		gotoxy(x, y++);  printf("  |＿_/_/ ");
 		gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
 	}
+}
+
+//술래 과정
+void tagger() {
+	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+
+	int showMotion = 0; //아무생각 없이 선언한 변수.. 음원 끝나면 뒤돌게
+
+	showYoungHee(showMotion);
+	showMotion = MusicTimer();
+	showYoungHee(showMotion);
+	
+	
 
 	
 
@@ -305,16 +337,12 @@ void mission() {
 }
 
 
-//장해물 닿음
-int TouchHurdle() {
-}
-
 
 //게임 시작
 void game() {
 	system("cls");
 	CursorView(); //커서 숨기기
-
+	
 	mission(); //미션
 	map(); //맵 그리기
 	character_control(0, 11); //캐릭터그리기 유저시작 위치
