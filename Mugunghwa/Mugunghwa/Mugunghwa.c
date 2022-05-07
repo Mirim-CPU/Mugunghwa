@@ -139,7 +139,11 @@ int  menu() {
 
 int m_x = 3; //화살표 처음 위치
 //캐릭터 움직이기
-int character_control(int x, int y) {
+
+unsigned _stdcall character_control() {
+	int x = 0;
+	int y = 11;
+
 	int i = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 	gotoxy(x, y); printf("  ■  ");
@@ -263,14 +267,15 @@ void showYoungHee(int show) {
 
 //술래 과정
 void tagger() {
-	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+	int showMotion = 0; //영희 모션 상태 1 - 뒤돌기, 0 - 앞 보기
 
-	int showMotion = 0; //아무생각 없이 선언한 변수.. 음원 끝나면 뒤돌게
+	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+	_beginthreadex(NULL, 0, character_control, 0, 0, NULL);
 
 	showYoungHee(showMotion);
 	showMotion = MusicTimer();
 	showYoungHee(showMotion);
-	
+	showMotion = 0;
 	
 
 	
@@ -345,7 +350,7 @@ void game() {
 	
 	mission(); //미션
 	map(); //맵 그리기
-	character_control(0, 11); //캐릭터그리기 유저시작 위치
+	
 
 	system("pause>null\n");
 }
