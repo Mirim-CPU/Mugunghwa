@@ -205,26 +205,6 @@ unsigned _stdcall character_control() {
 
 }
 
-
-
-unsigned _stdcall MusicTimer() {
-	timeBeginPeriod(1);
-
-	beginTime = timeGetTime();
-	PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원
-	while (1)
-	{
-		endTime = timeGetTime();
-
-		thisTime = (endTime - beginTime) / 1000;
-		if (thisTime == (double)6) {
-			return 1;
-		}
-	}
-
-	return ;
-}
-
 //영희 보여주기
 void showYoungHee(int show) {
 	int x = 52;
@@ -263,23 +243,47 @@ void showYoungHee(int show) {
 		gotoxy(x, y++);  printf("  |＿_/_/ ");
 		gotoxy(x, y++);  printf("  `ㅡ^ㅡ`");
 	}
+
 }
 
+unsigned _stdcall MusicTimer() {
+	timeBeginPeriod(1);
+
+	
+	while (1) {
+		PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원
+		beginTime = timeGetTime();
+
+		while (1)
+		{
+			endTime = timeGetTime();
+
+			thisTime = (endTime - beginTime) / 1000;
+			if (thisTime == (double)6) {
+				showYoungHee(1);
+			}
+			else if (thisTime == (double)8) {
+				showYoungHee(0);
+				beginTime = (double)0;
+				break;
+			}
+		}
+	}
+
+	return ;
+}
 //술래 과정
 void tagger() {
 	int showMotion = 0; //영희 모션 상태 1 - 뒤돌기, 0 - 앞 보기
+	showYoungHee(showMotion);
 
-	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
 	_beginthreadex(NULL, 0, character_control, 0, 0, NULL);
 
-	showYoungHee(showMotion);
-	showMotion = MusicTimer();
-	showYoungHee(showMotion);
-	showMotion = 0;
+	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+	
 	
 
 	
-
 
 }
 
@@ -292,8 +296,15 @@ void CreateHurdle() {
 	}
 }
 
+//점수 나타내기
+void showScore(int score) {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	gotoxy(52, 27); printf("점수 :  %d", score);
+}
+
 //맵
 void map() {
+	int show = 0; // 1 = show, 0 - hide
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 	for (int i = 0; i < 60; i++) {
 		gotoxy(i, 0); printf("■");
@@ -320,8 +331,8 @@ void map() {
 			printf("△");
 		
 	}
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(52, 27); printf("점수 :  %d", score);
+
+	 showScore(score);
 }
 
 
