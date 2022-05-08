@@ -146,9 +146,17 @@ int  menu() {
 
 }
 
+//완료 체크
+void checkFinish(int x, int y) {
+	if (x >= 50 && y >= 1 && y <= 23) {
+		system("cls");
+		gotoxy(30, 13); printf("완주");
+	}
+}
 
 int m_x = 3; //화살표 처음 위치
 //캐릭터 움직이기
+
 
 unsigned _stdcall character_control() {
 	int x = 0;
@@ -282,6 +290,8 @@ unsigned _stdcall MusicTimer() {
 
 	return ;
 }
+
+
 //술래 과정
 void tagger() {
 	int showMotion = 0; //영희 모션 상태 1 - 뒤돌기, 0 - 앞 보기
@@ -290,6 +300,8 @@ void tagger() {
 	_beginthreadex(NULL, 0, character_control, 0, 0, NULL);
 	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
 	
+
+
 }
 
 //장해물 생성
