@@ -98,15 +98,28 @@ void manual() {
 
 }
 
+void showMenu() {
+	int x = 45;
+	int y = 22;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
+	gotoxy(x - 1, y);  printf("▶ 게 임 시 작");
+	gotoxy(x, y += 2);  printf(" 게 임 종 료");
+
+	gotoxy(30, y -= 2);
+}
 //메뉴선택
 int  menu() {
 
 	int x = 45;
 	int y = 22;
+	int show = 0;
 
+	
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 	gotoxy(x-1, y);  printf("▶ 게 임 시 작");
 	gotoxy(x, y += 2);  printf(" 게 임 종 료");
+
 	gotoxy(30, y -= 2);
 	while (1) {
 		int n = keyControl();
@@ -155,7 +168,7 @@ unsigned _stdcall character_control() {
 
 		case RIGHT: {
 			if (x < 50) {
-				if (answer[i] == 0 || answer[i] == 1 || answer[i] == 2 || answer[i] == 3) { score += 10; }
+				if (answer[i] == 0 || answer[i] == 1 ) { score += 10; }
 				x++;
 				break;
 			}
@@ -163,6 +176,7 @@ unsigned _stdcall character_control() {
 		}
 		case LEFT: {
 			if (x > 2) {	
+				if( answer[i] == 2 || answer[i] == 3)
 				x--;
 				break;
 			}
@@ -170,7 +184,7 @@ unsigned _stdcall character_control() {
 		}
 		case UP: {
 			if (y > 1) {
-				if (answer[i] == 5) { score += 10; }
+				if (answer[i] == 4) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y--;
 			}
@@ -179,7 +193,7 @@ unsigned _stdcall character_control() {
 
 		case DOWN: {
 			if (y < 23) {
-				if (answer[i] == 4) { score += 10; }
+				if (answer[i] == 5) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y++;
 			}
@@ -249,7 +263,6 @@ void showYoungHee(int show) {
 unsigned _stdcall MusicTimer() {
 	timeBeginPeriod(1);
 
-	
 	while (1) {
 		PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //음원
 		beginTime = timeGetTime();
@@ -278,13 +291,8 @@ void tagger() {
 	showYoungHee(showMotion);
 
 	_beginthreadex(NULL, 0, character_control, 0, 0, NULL);
-
 	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
 	
-	
-
-	
-
 }
 
 //장해물 생성
@@ -332,7 +340,7 @@ void map() {
 		
 	}
 
-	 showScore(score);
+	 //showScore(score);
 }
 
 
@@ -340,7 +348,7 @@ void map() {
 //미션출력
 void mission() {
 	srand(time(NULL)); 
-	char m[6][10]= {"→",  "→",  "→","→","↑","↓",};
+	char m[6][10]= {"→",  "→",  "←","←","↑","↓",};
 	int color[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 	
 	gotoxy(3, 27);
