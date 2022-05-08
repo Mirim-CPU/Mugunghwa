@@ -1,7 +1,7 @@
 #include "Mugunghwa.h"
 
 Hurdle hurdle[BNum];
-
+HANDLE musicThread;
 
 
 int score = 0; //점수
@@ -170,11 +170,12 @@ unsigned _stdcall character_control() {
 		Sleep(300);
 		switch (n)
 		{
-
+			checkFinish(x, y);
 		case RIGHT: {
 			if (x < 50) {
 				if (answer[i] == 0 || answer[i] == 1 ) { score += 10; }
 				x++;
+
 				break;
 			}
 
@@ -264,7 +265,25 @@ void showYoungHee(int show) {
 	}
 
 }
-
+void showGameOver() {
+	system("cls");
+	gotoxy(30, 13); printf("GAME OVER");
+	
+}
+void check() {
+	
+	//if (_kbhit()) {
+	//	gotoxy(12, 12); printf("hit");
+	//}
+	if (_kbhit()) {
+		if (thisTime > (double)6 && thisTime < (double)8) {
+			printf("check");
+			showGameOver();
+			TerminateThread(musicThread, 0);
+			
+		}
+	}
+}
 unsigned _stdcall MusicTimer() {
 	timeBeginPeriod(1);
 
@@ -277,6 +296,7 @@ unsigned _stdcall MusicTimer() {
 			endTime = timeGetTime();
 
 			thisTime = (endTime - beginTime) / 1000;
+
 			if (thisTime == (double)6) {
 				showYoungHee(1);
 			}
@@ -285,6 +305,9 @@ unsigned _stdcall MusicTimer() {
 				beginTime = (double)0;
 				break;
 			}
+
+
+
 		}
 	}
 
@@ -297,11 +320,14 @@ void tagger() {
 	int showMotion = 0; //영희 모션 상태 1 - 뒤돌기, 0 - 앞 보기
 	showYoungHee(showMotion);
 
-	_beginthreadex(NULL, 0, character_control, 0, 0, NULL);
-	_beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+	HANDLE controlThread = _beginthreadex(NULL, 0, character_control, 0, 0, NULL);
+	musicThread = _beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
+	//HANDLE checkThread = _beginthreadex(NULL, 0, check, 0, 0, NULL);
+
+	while (1) {
+		check();
+	}
 	
-
-
 }
 
 //장해물 생성
