@@ -8,6 +8,7 @@ int score = 0; //점수
 double beginTime;
 double endTime;
 double thisTime; //begin-end;
+int showMN = 0;
 
 int answer[45]; //문제 저장
 //좌표
@@ -115,12 +116,8 @@ int  menu() {
 	int y = 22;
 	int show = 0;
 
-	
-	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(x-1, y);  printf("▶ 게 임 시 작");
-	gotoxy(x, y += 2);  printf(" 게 임 종 료");
+	if (++showMN == 1) showMenu();
 
-	gotoxy(30, y -= 2);
 	while (1) {
 		int n = keyControl();
 		switch (n)
