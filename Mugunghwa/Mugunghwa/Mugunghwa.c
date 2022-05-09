@@ -190,7 +190,7 @@ unsigned _stdcall character_control() {
 		}
 		case UP: {
 			if (y > 1) {
-				if (answer[i] == 4) { score += 10; }
+				if (answer[i] == 5) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y--;
 			}
@@ -199,7 +199,7 @@ unsigned _stdcall character_control() {
 
 		case DOWN: {
 			if (y < 23) {
-				if (answer[i] == 5) { score += 10; }
+				if (answer[i] == 4) { score += 10; }
 				gotoxy(x, y); printf("    ");
 				y++;
 			}
@@ -277,7 +277,6 @@ void check() {
 	//}
 	if (_kbhit()) {
 		if (thisTime > (double)6 && thisTime < (double)8) {
-			printf("check");
 			showGameOver();
 			TerminateThread(musicThread, 0);
 			
@@ -322,8 +321,7 @@ void tagger() {
 
 	HANDLE controlThread = _beginthreadex(NULL, 0, character_control, 0, 0, NULL);
 	musicThread = _beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
-	//HANDLE checkThread = _beginthreadex(NULL, 0, check, 0, 0, NULL);
-
+	
 	while (1) {
 		check();
 	}
@@ -383,7 +381,7 @@ void map() {
 //미션출력
 void mission() {
 	srand(time(NULL)); 
-	char m[6][10]= {"→",  "→",  "←","←","↑","↓",};
+	char m[6][10]= {"→",  "→",  "←","←","↓","↑"};
 	int color[6] = { 9,10,11,12,13,14 }; //컬러 랜덤
 	
 	gotoxy(3, 27);
