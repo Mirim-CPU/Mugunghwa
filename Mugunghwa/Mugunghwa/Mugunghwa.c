@@ -1,17 +1,18 @@
-#include "Mugunghwa.h"
+ï»¿#include "Mugunghwa.h"
 
-Hurdle hurdle[BNum];
+
 HANDLE musicThread;
 
 
-int score = 0; //Á¡¼ö
+int score = 0; //ì ìˆ˜
 double beginTime;
 double endTime;
 double thisTime; //begin-end;
 int showMN = 0;
-
-int answer[45]; //¹®Á¦ ÀúÀå
-//ÁÂÇ¥
+double soundtime = 0; //ìˆ ë˜ ì›€ì§ì„ ì²´í¬
+double chktime = 0; // í”Œë ˆì´ì–´ ì›€ì§ì„ ì²´í¬
+int answer[160]; //ë¬¸ì œ ì €ì¥
+//ì¢Œí‘œ
 void gotoxy(int x, int y)
 {
 	COORD Pos;
@@ -21,7 +22,7 @@ void gotoxy(int x, int y)
 }
 
 
-//Ä¿¼­ ¼û±â±â
+//ì»¤ì„œ ìˆ¨ê¸°ê¸°
 void CursorView()
 {
 	CONSOLE_CURSOR_INFO cursorInfo = { 0, };
@@ -30,7 +31,7 @@ void CursorView()
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cursorInfo);
 }
 
-//Ä¿¼­ Á¦¾î
+//ì»¤ì„œ ì œì–´
 int keyControl() {
 	char c;
 	while (1) {
@@ -38,7 +39,7 @@ int keyControl() {
 			c = _getch();
 			if (c == -32) {
 				c = _getch();
-				switch (c) {
+				switch (c) { 
 				case 72:
 					return UP; break;
 				case 80:
@@ -55,7 +56,7 @@ int keyControl() {
 	}
 }
 
-//Á¦¸ñ
+//ì œëª©
 void title() {
 
 	int x = 1;
@@ -91,7 +92,7 @@ void title() {
 
 
 
-//¼³¸í
+//ì„¤ëª…
 void manual() {
 
 
@@ -104,12 +105,12 @@ void showMenu() {
 	int y = 22;
 
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(x - 1, y);  printf("¢º °Ô ÀÓ ½Ã ÀÛ");
-	gotoxy(x, y += 2);  printf(" °Ô ÀÓ Á¾ ·á");
+	gotoxy(x - 1, y);  printf("â–¶ ê²Œ ì„ ì‹œ ì‘");
+	gotoxy(x, y += 2);  printf(" ê²Œ ì„ ì¢… ë£Œ");
 
 	gotoxy(30, y -= 2);
 }
-//¸Ş´º¼±ÅÃ
+//ë©”ë‰´ì„ íƒ
 int  menu() {
 
 	int x = 45;
@@ -126,14 +127,14 @@ int  menu() {
 			if (y > 22) {
 			
 				gotoxy(x - 1, y); printf("  ");
-				gotoxy(x - 1, y -= 2); printf("¢º");
+				gotoxy(x - 1, y -= 2); printf("â–¶");
 			}
 			break;
 		}
 		case DOWN: {
 			if (y < 24) {
 				gotoxy(x - 1, y); printf("  ");
-				gotoxy(x - 1, y += 2); printf("¢º");
+				gotoxy(x - 1, y += 2); printf("â–¶");
 			}
 
 			break;
@@ -146,122 +147,123 @@ int  menu() {
 
 }
 
-//¿Ï·á Ã¼Å©
+//ì™„ë£Œ ì²´í¬
 void checkFinish(int x, int y) {
 	if (x >= 50 && y >= 1 && y <= 23) {
 		system("cls");
-		gotoxy(30, 13); printf("¿ÏÁÖ");
+		gotoxy(30, 13); printf("ì™„ì£¼");
 	}
 }
 
-int m_x = 3; //È­»ìÇ¥ Ã³À½ À§Ä¡
-//Ä³¸¯ÅÍ ¿òÁ÷ÀÌ±â
+int m_x = 3; //í™”ì‚´í‘œ ì²˜ìŒ ìœ„ì¹˜
+//ìºë¦­í„° ì›€ì§ì´ê¸°
 
 
 unsigned _stdcall character_control() {
-	int x = 0;
-	int y = 11;
+	int x = 4;
+	int y = 6;
 
 	int i = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
-	gotoxy(x, y); printf("  ¡á  ");
+	gotoxy(x, y); printf("â– ");
 	while (i<45) {
 		int n = keyControl();
-		Sleep(300);
 		switch (n)
 		{
-			checkFinish(x, y);
 		case RIGHT: {
-			if (x < 50) {
-				if (answer[i] == 0 || answer[i] == 1 ) { score += 10; }
-				x++;
+
+				if (answer[i] == 0 ) { score += 10; }
 
 				break;
-			}
+	
 
 		}
 		case LEFT: {
-			if (x > 2) {	
-				if( answer[i] == 2 || answer[i] == 3)
-				x--;
+
+				if( answer[i] == 1) { score += 10; }
+
 				break;
-			}
+
 
 		}
 		case UP: {
-			if (y > 1) {
-				if (answer[i] == 5) { score += 10; }
-				gotoxy(x, y); printf("    ");
-				y--;
-			}
+
+				if (answer[i] == 3) { score += 10; }
+	
+
+
 			break;
 		}
 
 		case DOWN: {
-			if (y < 23) {
-				if (answer[i] == 4) { score += 10; }
-				gotoxy(x, y); printf("    ");
-				y++;
-			}
+
+				if (answer[i] == 2) { score += 10; }
+		
 			break;
 		}
-		
+
 		}
+
+		switch (i / 5)
+		{
+		case 0: gotoxy(x, y++); printf("  "); break;
+		case 1:  gotoxy(x++, y); printf("  "); break;
+		case 2:  gotoxy(x, y++); printf("  "); break;
+		case 3: gotoxy(x++, y); printf("  "); break;
+		case 4: gotoxy(x, y--);  printf("  "); break;
+		case 5: gotoxy(x++, y); printf("  "); break;
+		case 6:  gotoxy(x, y++); printf("  "); break;
+		case 7:  gotoxy(x++, y); printf("  "); break;
+		}
+
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
-		gotoxy(x, y); printf("  ¡á  ");
-		gotoxy(m_x++,27); printf("  ");
 		i++;
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(52, 27); printf("Á¡¼ö :  %d", score);
-		//Start ¶óÀÎ Áö¿ì±â
-		if (x > 0) {
-			for (int i = 0; i < 25; i++) {
-				gotoxy(3, i); printf(" ");
-			}
-		}
+		gotoxy(52, 27); printf("ì ìˆ˜ :  %d", score);
+	
 
 
 	}
 
 }
 
-//¿µÈñ º¸¿©ÁÖ±â
+//ì˜í¬ ë³´ì—¬ì£¼ê¸°
 void showYoungHee(int show) {
 	int x = 52;
 	int y = 7;
 
 	if (show == 1) {
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(x, y++);  printf("£¯£ş£ş£ş£ş¡¬");
-		gotoxy(x, y++);  printf("/¤Ñ¡¡ ¡¡¤Ñ ¡¬ ");
-		gotoxy(x, y++);  printf("/(¡Ú) (¡Ú) ");
-		gotoxy(x, y++);  printf("£ü¡Ò ìÑ¡Ò   | ");
-		gotoxy(x, y++);  printf("¡¬¡¡¡¡     «Î ");
+		gotoxy(x, y++);  printf("ï¼ï¿£ï¿£ï¿£ï¿£ï¼¼");
+		gotoxy(x, y++);  printf("/ã…¡ã€€ ã€€ã…¡ ï¼¼ ");
+		gotoxy(x, y++);  printf("/(â˜…) (â˜…)     ");
+		gotoxy(x, y++);  printf("ï½œâŒ’ äººâŒ’   | ");
+		gotoxy(x, y++);  printf("ï¼¼ã€€ã€€     ãƒ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-		gotoxy(x, y++);  printf("  /¡Ò¡¬-«¤ ");
+		gotoxy(x, y++);  printf("  /âŒ’ï¼¼-ã‚¤ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-		gotoxy(x, y++);  printf(" (¡¡r ¡¡ £ü ");
-		gotoxy(x, y++);  printf(" ¡¬«Î«Î--£ü ");
+		gotoxy(x, y++);  printf(" (ã€€r ã€€ ï½œ ");
+		gotoxy(x, y++);  printf(" ï¼¼ãƒãƒ--ï½œ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(x, y++);  printf("  |£ß_/_/ ");
-		gotoxy(x, y++);  printf("  `¤Ñ^¤Ñ`");
+		gotoxy(x, y++);  printf("  |ï¼¿_/_/ ");
+		gotoxy(x, y++);  printf("  `ã…¡^ã…¡`");
 	}
-	//¿µÈñ µÚµ¹±âÀü
+	//ì˜í¬ ë’¤ëŒê¸°ì „
 	else {
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(x, y++);  printf("£¯£ş£ş£ş£ş¡¬");
-		gotoxy(x, y++);  printf("/¡¡ ¤Ñ¡¡ ¤Ñ¡¬ ");
-		gotoxy(x, y++);  printf("/ (¡Ü) ¡¡(¡Ü) ");
-		gotoxy(x, y++);  printf("£ü ¡Ò  ìÑ¡Ò | ");
-		gotoxy(x, y++);  printf("¡¬¡¡¡¡     «Î ");
+		gotoxy(x, y++);  printf("ï¼ï¿£ï¿£ï¿£ï¿£ï¼¼");
+		gotoxy(x, y++);  printf("/ã€€ ã…¡ã€€ ã…¡ï¼¼ ");
+		gotoxy(x, y++);  printf("/ (â—) ã€€(â—) ");
+		gotoxy(x, y++);  printf("ï½œ âŒ’  äººâŒ’ | ");
+		gotoxy(x, y++);  printf("ï¼¼ã€€ã€€     ãƒ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), YELLOW);
-		gotoxy(x, y++);  printf("  /¡Ò¡¬-«¤ ");
+		gotoxy(x, y++);  printf("  /âŒ’ï¼¼-ã‚¤ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
-		gotoxy(x, y++);  printf(" (¡¡r ¡¡ £ü ");
-		gotoxy(x, y++);  printf(" ¡¬«Î«Î--£ü ");
+		gotoxy(x, y++);  printf(" (ã€€r ã€€ ï½œ ");
+		gotoxy(x, y++);  printf(" ï¼¼ãƒãƒ--ï½œ ");
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(x, y++);  printf("  |£ß_/_/ ");
-		gotoxy(x, y++);  printf("  `¤Ñ^¤Ñ`");
+		gotoxy(x, y++);  printf("  |ï¼¿_/_/ ");
+		gotoxy(x, y++);  printf("  `ã…¡^ã…¡`");
 	}
 
 }
@@ -270,24 +272,42 @@ void showGameOver() {
 	gotoxy(30, 13); printf("GAME OVER");
 	
 }
+
+
 void check() {
 	
 	//if (_kbhit()) {
 	//	gotoxy(12, 12); printf("hit");
 	//}
+
+	//ê²€í† í•  ê²ƒ
 	if (_kbhit()) {
-		if (thisTime > (double)6 && thisTime < (double)8) {
+		if (thisTime > (double)chktime && thisTime < (double)chktime) {
 			showGameOver();
 			TerminateThread(musicThread, 0);
 			
 		}
 	}
 }
-unsigned _stdcall MusicTimer() {
+ unsigned _stdcall  MusicTimer() {
 	timeBeginPeriod(1);
 
+
+	
 	while (1) {
-		PlaySound(TEXT("sound.wav"), NULL, SND_FILENAME | SND_ASYNC); //À½¿ø
+		
+		int rn = (rand() % 5);
+
+		switch (rn)
+		{
+		case 0:	PlaySound(TEXT("./music/sound1.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 4; chktime = 4;  break;
+		case 1:	PlaySound(TEXT("./music/sound2.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 3; chktime = 3; break;
+		case 2:	PlaySound(TEXT("./music/sound3.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 2; chktime = 2; break;
+		case 3:	PlaySound(TEXT("./music/sound4.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1; chktime = 1; break;
+		case 4:	PlaySound(TEXT("./music/sound5.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 0.5;  chktime = 0.5; break;
+
+		}
+	
 		beginTime = timeGetTime();
 
 		while (1)
@@ -296,10 +316,10 @@ unsigned _stdcall MusicTimer() {
 
 			thisTime = (endTime - beginTime) / 1000;
 
-			if (thisTime == (double)6) {
+			if (thisTime == soundtime) {
 				showYoungHee(1);
 			}
-			else if (thisTime == (double)8) {
+			else if (thisTime == soundtime +2) {
 				showYoungHee(0);
 				beginTime = (double)0;
 				break;
@@ -310,13 +330,15 @@ unsigned _stdcall MusicTimer() {
 		}
 	}
 
-	return ;
+
 }
 
 
-//¼ú·¡ °úÁ¤
+
+
+//ìˆ ë˜ ê³¼ì •
 void tagger() {
-	int showMotion = 0; //¿µÈñ ¸ğ¼Ç »óÅÂ 1 - µÚµ¹±â, 0 - ¾Õ º¸±â
+	int showMotion = 0; //ì˜í¬ ëª¨ì…˜ ìƒíƒœ 1 - ë’¤ëŒê¸°, 0 - ì• ë³´ê¸°
 	showYoungHee(showMotion);
 
 	HANDLE controlThread = _beginthreadex(NULL, 0, character_control, 0, 0, NULL);
@@ -328,81 +350,112 @@ void tagger() {
 	
 }
 
-//ÀåÇØ¹° »ı¼º
-void CreateHurdle() {
-	
-	for (int i = 0; i < BNum; i++) {
-			hurdle[i].x = rand() % 42 + 4;
-			hurdle[i].y = rand() % 22+1;
-	}
-}
 
-//Á¡¼ö ³ªÅ¸³»±â
+
+
+//ì ìˆ˜ ë‚˜íƒ€ë‚´ê¸°
 void showScore(int score) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(52, 27); printf("Á¡¼ö :  %d", score);
+	gotoxy(52, 27); printf("ì ìˆ˜ :  %d", score);
 }
 
-//¸Ê
+
+
+//ë§µ
 void map() {
+
 	int show = 0; // 1 = show, 0 - hide
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 	for (int i = 0; i < 60; i++) {
-		gotoxy(i, 0); printf("¡á");
+		gotoxy(i, 0); printf("â– ");
 	}
 
 	for (int i = 0; i < 60; i++) {
-		gotoxy(i, 24); printf("¡á");
+		gotoxy(i, 24); printf("â– ");
 	}
-	//start ¶óÀÎ
+	//start ë¼ì¸
 	for (int i = 0; i < 25; i++) {
 		gotoxy(3, i); printf("|");
 	}
 
-	//finish ¶óÀÎ
+	//finish ë¼ì¸
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), RED);
 	for (int i = 1; i < 24; i++) {
 		gotoxy(50, i); printf("|");
 	}
 	tagger();
 
-	CreateHurdle();
-	for (int i = 0; i < BNum; i++) {
-			gotoxy(hurdle[i].x, hurdle[i].y);
-			printf("¡â");
-		
-	}
+
 
 	 //showScore(score);
 }
 
 
 
-//¹Ì¼ÇÃâ·Â
+//ë¯¸ì…˜ì¶œë ¥
 void mission() {
 	srand(time(NULL)); 
-	char m[6][10]= {"¡æ",  "¡æ",  "¡ç","¡ç","¡é","¡è"};
-	int color[6] = { 9,10,11,12,13,14 }; //ÄÃ·¯ ·£´ı
-	
-	gotoxy(3, 27);
-	for (int i = 0; i < 45; i++) {
-		int rn = (rand() % 6);
+	char m[4][10]= {"â†’","â†","â†“","â†‘"};
+	int color[6] = { 9,10,11,12,13,14 }; //ì»¬ëŸ¬ ëœë¤
+	int x = 4, y = 6;
+
+	for (int i = 0; i < 160; i++) {
+		int rn = (rand() % 4);
 		answer[i] = rn;
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[rn]);
-		printf("%s",m[rn]); //È­»ìÇ¥ Ãâ·Â
+
+		switch (i / 5)
+		{
+		case 0: gotoxy(x, y++); printf("%s", m[rn]); break;
+		case 1:  gotoxy(x++, y); printf("%s", m[rn]);   break;
+		case 2:  gotoxy(x, y++); printf("%s", m[rn]);   break;
+		case 3: gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 4: gotoxy(x, y--);  printf("%s", m[rn]);  break;
+		case 5: gotoxy(x++, y); printf("%s", m[rn]); break;
+		case 6:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 7:  gotoxy(x++, y);  printf("%s", m[rn]);  break;
+		case 8:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 9:  gotoxy(x++, y);  printf("%s", m[rn]);  break;
+		case 10:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 11:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 12:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 13:  gotoxy(x--, y); printf("%s", m[rn]);  break;
+		case 14:  gotoxy(x--, y); printf("%s", m[rn]);  break;
+		case 15:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 16:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 17:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 18:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 19:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 20:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 21:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 22:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 23:  gotoxy(x, y++); printf("%s", m[rn]);  break;
+		case 24:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		case 25:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 26:  gotoxy(x, y--); printf("%s", m[rn]);  break;
+		case 27:  gotoxy(x++, y); printf("%s", m[rn]);  break;
+		}
+
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+		//í™”ì‚´í‘œ ì¶œë ¥
 	}
 }
 
 
 
-//°ÔÀÓ ½ÃÀÛ
+
+
+
+
+
+//ê²Œì„ ì‹œì‘
 void game() {
 	system("cls");
-	CursorView(); //Ä¿¼­ ¼û±â±â
-	
-	mission(); //¹Ì¼Ç
-	map(); //¸Ê ±×¸®±â
-	
+	CursorView(); //ì»¤ì„œ ìˆ¨ê¸°ê¸°
+
+	mission(); //ë¯¸ì…˜
+	map(); //ë§µ ê·¸ë¦¬ê¸°
+
+
 
 	system("pause>null\n");
 }
@@ -411,13 +464,15 @@ void main() {
 
 	CursorView();
 	system("mode con: cols=120 lines=30"); 
-	system("title ¹«±ÃÈ­²ÉÀÌ ÇÇ¾ú½À´Ï´Ù");
+	system("title ë¬´ê¶í™”ê½ƒì´ í”¼ì—ˆìŠµë‹ˆë‹¤");
+
 	title();
 	
 	while (1) {
 		switch (menu()) {
-		case 0: game(); break; //°ÔÀÓ½ÃÀÛ
-		case 2: exit(0);  break; // °ÔÀÓÁ¾·á
+		case 0: game(); break; //ê²Œì„ì‹œì‘
+		case 2: exit(0);  break; // ê²Œì„ì¢…ë£Œ
+		//case esc: main() break;
 		}
 
 	}

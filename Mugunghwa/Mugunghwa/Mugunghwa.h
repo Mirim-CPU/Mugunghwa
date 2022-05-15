@@ -7,7 +7,7 @@
 #include<math.h>
 #include <process.h>
 #pragma comment (lib, "winmm.lib")
-#include <mmsystem.h>;
+#include <mmsystem.h>W
 
 
 enum Color
@@ -39,14 +39,3 @@ enum Color
 #define ESC 16
 
 
-#define WIDTH 100
-#define HEIGHT 28
-#define BNum 5
-
-typedef struct
-{
-    int x;
-    int y;
-
-    int con;
-}Hurdle;
