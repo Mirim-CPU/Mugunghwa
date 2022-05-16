@@ -219,8 +219,8 @@ unsigned _stdcall character_control() {
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 		i++;
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-		gotoxy(52, 27); printf("점수 :  %d", score);
-	
+		gotoxy(20, 29); printf(" % d", score);
+
 
 
 	}
@@ -276,19 +276,17 @@ void showGameOver() {
 
 void check() {
 	
-	//if (_kbhit()) {
-	//	gotoxy(12, 12); printf("hit");
-	//}
 
-	//검토할 것
 	if (_kbhit()) {
-		if (thisTime > (double)chktime && thisTime < (double)chktime) {
+		if (thisTime > (double)soundtime && thisTime < (double)soundtime+2) {
 			showGameOver();
 			TerminateThread(musicThread, 0);
 			
 		}
 	}
 }
+
+
  unsigned _stdcall  MusicTimer() {
 	timeBeginPeriod(1);
 
@@ -300,11 +298,11 @@ void check() {
 
 		switch (rn)
 		{
-		case 0:	PlaySound(TEXT("./music/sound1.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 4; chktime = 4;  break;
-		case 1:	PlaySound(TEXT("./music/sound2.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 3; chktime = 3; break;
-		case 2:	PlaySound(TEXT("./music/sound3.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 2; chktime = 2; break;
-		case 3:	PlaySound(TEXT("./music/sound4.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1; chktime = 1; break;
-		case 4:	PlaySound(TEXT("./music/sound5.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 0.5;  chktime = 0.5; break;
+		case 0:			PlaySound(TEXT("./music/sound1.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 4.5; break;
+		case 1:		PlaySound(TEXT("./music/sound2.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 3.2; break;
+		case 2:			PlaySound(TEXT("./music/sound3.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 2.3; break;
+		case 3:			PlaySound(TEXT("./music/sound4.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1.9; break;
+		case 4:	PlaySound(TEXT("./music/sound5.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1.5;   break;
 
 		}
 	
@@ -353,10 +351,32 @@ void tagger() {
 
 
 
-//점수 나타내기
-void showScore(int score) {
+void showHeart() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+	gotoxy(32, 27);  printf("  ,d88b.d88b,");
+	gotoxy(32, 28);  printf("  88888888888");
+	gotoxy(32, 29);  printf("  `Y8888888Y'");
+	gotoxy(32, 30);  printf("    `Y888Y'    ");
+	gotoxy(32, 31);  printf("      `Y' ");
+
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
-	gotoxy(52, 27); printf("점수 :  %d", score);
+	gotoxy(40, 28);  printf("( ＼/ )");
+	gotoxy(40, 29);  printf("  ) ( ");
+	gotoxy(40, 30);  printf("(_/＼_)");
+	gotoxy(46, 29); printf(" %d", 3);
+}
+
+
+//점수 나타내기
+void showScore() {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTBLUE);
+
+	gotoxy(5, 27);  printf(" ___  ___ ___   _  __ ___   ");
+	gotoxy(5, 28);  printf("/ __|/ __/ _ ＼ | '__/ _ ＼  0");
+	gotoxy(5, 29);  printf("＼__＼ (_| (_)  | |  | __/");
+	gotoxy(5, 30);  printf("|___/＼___＼___/|_|  ＼___|  0 ");
+	gotoxy(20, 29); printf(" % d", 0);
+
 }
 
 
@@ -387,7 +407,7 @@ void map() {
 
 
 
-	 //showScore(score);
+
 }
 
 
@@ -435,7 +455,7 @@ void mission() {
 		case 27:  gotoxy(x++, y); printf("%s", m[rn]);  break;
 		}
 
-		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), LIGHTRED);
+		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color[rn]);
 		//화살표 출력
 	}
 }
@@ -451,7 +471,8 @@ void mission() {
 void game() {
 	system("cls");
 	CursorView(); //커서 숨기기
-
+	showScore();//점수판
+	showHeart();//목숨판
 	mission(); //미션
 	map(); //맵 그리기
 

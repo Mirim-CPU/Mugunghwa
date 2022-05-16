@@ -10,6 +10,8 @@
 #include <mmsystem.h>W
 
 
+
+void showScore(int);
 enum Color
 {
     BLACK,
