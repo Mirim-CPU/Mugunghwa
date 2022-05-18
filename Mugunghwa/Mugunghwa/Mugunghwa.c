@@ -2,7 +2,7 @@
 
 
 HANDLE musicThread;
-
+HANDLE controlThread;
 
 int score = 0; //점수
 double beginTime;
@@ -12,11 +12,19 @@ int showMN = 0;
 double soundtime = 0; //술래 움직임 체크
 double chktime = 0; // 플레이어 움직임 체크
 int answer[160]; //문제 저장
+int answer_len = 160;
+int heart = 5; //목숨값
+int input = 1;
+
+
+
+
+
 //좌표
 void gotoxy(int x, int y)
 {
 	COORD Pos;
-	Pos.X = 2 * x;
+	Pos.X = x*2;
 	Pos.Y = y;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), Pos);
 }
@@ -40,6 +48,8 @@ int keyControl() {
 			if (c == -32) {
 				c = _getch();
 				switch (c) { 
+				case 27: 
+					return ESC; break;
 				case 72:
 					return UP; break;
 				case 80:
@@ -117,12 +127,13 @@ int  menu() {
 	int y = 22;
 	int show = 0;
 
-	if (++showMN == 1) showMenu();
+	//if (++showMN == 1) showMenu();
 
 	while (1) {
 		int n = keyControl();
 		switch (n)
 		{
+
 		case UP: {
 			if (y > 22) {
 			
@@ -166,44 +177,57 @@ unsigned _stdcall character_control() {
 	int i = 0;
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 	gotoxy(x, y); printf("■");
-	while (i<45) {
-		int n = keyControl();
-		switch (n)
-		{
-		case RIGHT: {
-
-				if (answer[i] == 0 ) { score += 10; }
-
-				break;
+	while (input) {
 	
+		int n = _getch();
 
+		//게임종료
+		if (n==27) {
+		score = 0;
+		heart = 5;
+		PlaySound(NULL, 0, 0);
+		system("cls");
+		main();
 		}
-		case LEFT: {
+			n = keyControl();
+			switch (n)
+			{
 
-				if( answer[i] == 1) { score += 10; }
+		
+			case RIGHT: {
 
+				if (answer[i] == 0) { score += 10; }
+				else heart--;
 				break;
 
 
-		}
-		case UP: {
+			}
+			case LEFT: {
+
+				if (answer[i] == 1) { score += 10; }
+				else heart--;
+				break;
+
+
+			}
+			case UP: {
 
 				if (answer[i] == 3) { score += 10; }
-	
+				else heart--;
 
 
-			break;
-		}
+				break;
+			}
 
-		case DOWN: {
+			case DOWN: {
 
 				if (answer[i] == 2) { score += 10; }
-		
-			break;
-		}
+				else heart--;
+				break;
+			}
+
 
 		}
-
 		switch (i / 5)
 		{
 		case 0: gotoxy(x, y++); printf("  "); break;
@@ -214,13 +238,33 @@ unsigned _stdcall character_control() {
 		case 5: gotoxy(x++, y); printf("  "); break;
 		case 6:  gotoxy(x, y++); printf("  "); break;
 		case 7:  gotoxy(x++, y); printf("  "); break;
+		case 8:  gotoxy(x, y++); printf("  "); break;
+		case 9:  gotoxy(x++, y);  printf("  "); break;
+		case 10:  gotoxy(x, y--); printf("  "); break;
+		case 11:  gotoxy(x, y--); printf("  "); break;
+		case 12:  gotoxy(x, y--); printf("  "); break;
+		case 13:  gotoxy(x--, y); printf("  "); break;
+		case 14:  gotoxy(x--, y); printf("  "); break;
+		case 15:  gotoxy(x, y--); printf("  "); break;
+		case 16:  gotoxy(x++, y); printf("  "); break;
+		case 17:  gotoxy(x++, y); printf("  "); break;
+		case 18:  gotoxy(x++, y); printf("  "); break;
+		case 19:  gotoxy(x, y++); printf("  "); break;
+		case 20:  gotoxy(x, y++); printf("  "); break;
+		case 21:  gotoxy(x, y++); printf("  "); break;
+		case 22:  gotoxy(x++, y); printf("  "); break;
+		case 23:  gotoxy(x, y++); printf("  "); break;
+		case 24:  gotoxy(x++, y); printf("  "); break;
+		case 25:  gotoxy(x, y--); printf("  "); break;
+		case 26:  gotoxy(x, y--); printf("  "); break;
+		case 27:  gotoxy(x++, y); printf("  "); break;
 		}
 
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), GREEN);
 		i++;
 		SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 		gotoxy(20, 29); printf(" % d", score);
-
+		gotoxy(46, 29); printf(" %d", heart);
 
 
 	}
@@ -268,20 +312,41 @@ void showYoungHee(int show) {
 
 }
 void showGameOver() {
+
 	system("cls");
+	PlaySound(NULL, 0, 0);
+
+	score = 0;
+	heart = 5;
+
 	gotoxy(30, 13); printf("GAME OVER");
+
+	Sleep(2000);
+	system("cls");
+	main();
+
 	
 }
 
 
 void check() {
-	
+
+	if (heart == 0) {
+		input = 0;
+		showGameOver();
+		TerminateThread(musicThread, 0);
+		TerminateThread(controlThread, 0);
+
+	}
 
 	if (_kbhit()) {
-		if (thisTime > (double)soundtime && thisTime < (double)soundtime+2) {
+
+		if (thisTime > (double)soundtime && thisTime < (double)soundtime + 2) {
+			input = 0;
 			showGameOver();
 			TerminateThread(musicThread, 0);
-			
+			TerminateThread(controlThread, 0);
+
 		}
 	}
 }
@@ -292,23 +357,23 @@ void check() {
 
 
 	
-	while (1) {
+	while (input) {
 		
 		int rn = (rand() % 5);
 
 		switch (rn)
 		{
-		case 0:			PlaySound(TEXT("./music/sound1.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 4.5; break;
-		case 1:		PlaySound(TEXT("./music/sound2.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 3.2; break;
-		case 2:			PlaySound(TEXT("./music/sound3.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 2.3; break;
-		case 3:			PlaySound(TEXT("./music/sound4.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1.9; break;
+		case 0:	PlaySound(TEXT("./music/sound1.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 4.5; break;
+		case 1:	PlaySound(TEXT("./music/sound2.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 3.2; break;
+		case 2:	PlaySound(TEXT("./music/sound3.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 2.3; break;
+		case 3:	PlaySound(TEXT("./music/sound4.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1.9; break;
 		case 4:	PlaySound(TEXT("./music/sound5.wav"), NULL, SND_FILENAME | SND_ASYNC); soundtime = 1.5;   break;
 
 		}
 	
 		beginTime = timeGetTime();
 
-		while (1)
+		while (input)
 		{
 			endTime = timeGetTime();
 
@@ -339,7 +404,7 @@ void tagger() {
 	int showMotion = 0; //영희 모션 상태 1 - 뒤돌기, 0 - 앞 보기
 	showYoungHee(showMotion);
 
-	HANDLE controlThread = _beginthreadex(NULL, 0, character_control, 0, 0, NULL);
+	 controlThread = _beginthreadex(NULL, 0, character_control, 0, 0, NULL);
 	musicThread = _beginthreadex(NULL, 0, MusicTimer, 0, 0, NULL);
 	
 	while (1) {
@@ -363,7 +428,8 @@ void showHeart() {
 	gotoxy(40, 28);  printf("( ＼/ )");
 	gotoxy(40, 29);  printf("  ) ( ");
 	gotoxy(40, 30);  printf("(_/＼_)");
-	gotoxy(46, 29); printf(" %d", 3);
+	gotoxy(46, 29); printf(" %d", 5);
+
 }
 
 
@@ -375,6 +441,7 @@ void showScore() {
 	gotoxy(5, 28);  printf("/ __|/ __/ _ ＼ | '__/ _ ＼  0");
 	gotoxy(5, 29);  printf("＼__＼ (_| (_)  | |  | __/");
 	gotoxy(5, 30);  printf("|___/＼___＼___/|_|  ＼___|  0 ");
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), WHITE);
 	gotoxy(20, 29); printf(" % d", 0);
 
 }
@@ -474,6 +541,7 @@ void game() {
 	showScore();//점수판
 	showHeart();//목숨판
 	mission(); //미션
+
 	map(); //맵 그리기
 
 
@@ -488,15 +556,16 @@ void main() {
 	system("title 무궁화꽃이 피었습니다");
 
 	title();
-	
+	showMenu();
+
 	while (1) {
 		switch (menu()) {
-		case 0: game(); break; //게임시작
+		case 0: 	input = 1;  game(); break; //게임시작
 		case 2: exit(0);  break; // 게임종료
 		//case esc: main() break;
 		}
 
 	}
-
+	system("pause>null\n");
 }
 

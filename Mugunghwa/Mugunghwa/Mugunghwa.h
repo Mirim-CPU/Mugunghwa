@@ -6,10 +6,12 @@
 #include <time.h>
 #include<math.h>
 #include <process.h>
+#include <pthread.h>
 #pragma comment (lib, "winmm.lib")
-#include <mmsystem.h>W
+#include <mmsystem.h>
 
 
+void main();
 
 void showScore(int);
 enum Color
@@ -38,6 +40,6 @@ enum Color
 #define RIGHT  13
 #define LEFT  14
 #define SPACE 15
-#define ESC 16
+#define ESC 27
 
 
